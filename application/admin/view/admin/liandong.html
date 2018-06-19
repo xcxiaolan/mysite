@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>联动</title>
+    <script src="{$public}/js/jquery-3.3.1.js"></script>
+    <script>
+        $(document).ready(function(e) {
+            //写入方法
+            //填充省的方法
+            function FillShi(){
+                //方法的功能
+                $.ajax({
+                    async:true,
+                    url:"lian",
+                    data:$("#sheng").serialize(),
+                    type:"POST",
+                    dataType:"json",
+                    success:function(data){
+                        var data=JSON.parse(data);
+                        console.log(data);
+                        // var str = "";
+                        // for(var i=0;i<data.length;i++)
+                        // {
+                        //     str += "<option name='pcode' value='"+data[i].did+"'>"+data[i].dname+"</option>"; //显示索引是1的也就是名称那一列，菜单项的值是表中的地区代号那一列
+                        // }
+                        // $("#shi").html(str);
+                    }
+                });
+            }
+            // function FillQu(){
+            //     //方法的功能
+            //     $.ajax({
+            //         async:false,
+            //         url:"lian",
+            //         data:$("#shi").serialize(),
+            //         type:"POST",
+            //         dataType:"json",
+            //         success:function(data){
+            //             console.log(data);
+            //             var data=JSON.parse(data);
+            //             var str = "";
+            //             for(var i=0;i<data.length;i++)
+            //             {
+            //                 str += "<option name='pcode' value='"+data[i]["did"]+"'>"+data[i]["dname"]+"</option>"; //显示索引是1的也就是名称那一列，菜单项的值是表中的地区代号那一列
+            //             }
+            //             $("#qu").html(str);
+            //         }
+            //     });
+            // }
+            $("#sheng").change(function(){  //改变省，下面的市和区显示
+                FillShi();
+            })
+            $("#shi").change(function(){  //这里就是改变区的
+                FillQu();
+            })
+        });
+    </script>
+</head>
+<body>
+    <div id="sanji">
+        <select name='pcode' id='sheng'>
+            <option value="0">请选择省</option>
+            {volist name="list" id="vo"}
+                <option value="{$vo['did']}">{$vo["dname"]}</option>
+            {/volist}
+        </select>
+        <select id='shi'>
+            <option value="0">请选择市</option>
+        </select>
+        <select id='qu'>
+            <option value="0">请选择区</option>
+        </select>
+    </div>
+</body>
+
+
+</html>

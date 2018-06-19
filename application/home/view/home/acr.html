@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>猴王的诞生</title>
+    <script src="../../../../static/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div class="ca">
+        <form>
+            <p><b>多少只踢出：</b></p>
+            <!--<form id="mainForm" method="post" action="getar">-->
+            <input name="out" id="out" type="text">
+            <p><b>猴子数量：</b></p>
+            <input name="num" id="num" type="text">
+            <input type="button" id="btn" value="提交">
+            <!--</form>-->
+            <p>猴王编号：<span id="txtHint"></span></p>
+        </form>
+
+    </div>
+</body>
+<script type="text/javascript">
+    $("#btn").click(function(){
+        $.ajax({
+            async:true,
+            type:"POST",
+            data:{out:$("#out").val(),num:$("#num").val()},
+            url:"aum",
+            success:function(data){
+                $("#txtHint").text(data);
+            }
+        });
+    });
+</script>
+
+</html>

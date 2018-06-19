@@ -1,0 +1,25 @@
+<!-- header-section-starts -->
+<div class="h-top" id="home">
+    <div class="top-header">
+        <ul class="cl-effect-16 top-nag">
+            <li><a class="{$a}" href="../Home/registration"  data-hover="Registration">Registration</a></li>
+            <li><a class="{$b}" href="../Arcate/arcate" data-hover="Arcate">Arcate</a></li>
+            <li><a class="{$c}" href="../Home/services" data-hover="SERVICES">SERVICES</a></li>
+            <li><a class="{$d}" href="../Home/login" data-hover="Login">Login</a></li>
+            <li><a class="{$e}" href="../Home/contact" data-hover="CONTACT">Contact</a></li>
+            <?php if($name != '') { ?>
+            <li><a href="../Home/exitLogon" data-hover="[Exit]">[Exit]</a></li>
+            <?php } ?>
+        </ul>
+        <div class="search-box">
+            <div class="b-search">
+                <form>
+                    <input type="text" value="Search" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search';}">
+                    <input type="submit" value="">
+                </form>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>

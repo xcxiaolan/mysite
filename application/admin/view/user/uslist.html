@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{$public}/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{$public}/css/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="{$public}/css/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{$public}/css/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{$public}/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{$public}/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            {include file='public/header' /}
+            <!-- /.navbar-top-links -->
+
+            {include file='public/left' /}
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">用户列表</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="panel-default">
+                        <!-- /.panel-heading -->
+                <form>
+                    <input type="text" id="search">
+                    <input type="button" id="btn" value="搜索">
+                    <div>
+                        <table width="100%" class="table table-striped table-bordered table-hover" >
+                            <thead>
+                            <tr>
+                                <th>ID编号</th>
+                                <th>用户名</th>
+                                <th>性别</th>
+                                <th>年龄</th>
+                                <th>电子邮箱</th>
+                                <th>添加时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="result">
+                            {volist name="list" id="vo"}
+                            <tr>
+                                <td>{$vo["user_id"]}</td>
+                                <td>{$vo["user_name"]}</td>
+                                <td>{$vo["user_sex"]}</td>
+                                <td>{$vo["user_age"]}</td>
+                                <td>{$vo["user_email"]}</td>
+                                <td>{$vo["user_addtime"]}</td>
+                                <td><span id="{$vo.user_id}" class="state">{$vo["user_state"]==1?"启用":"禁用"}</span></td>
+                                <td>
+                                    <a href="update?id={$vo.user_id}">修改</a>
+                                    <a class="delete" data-id="{$vo.user_id}">删除</a>
+                                    <a id="sta" class="sta" data-id="{$vo.user_id}" data-state="{$vo.user_state}">{$vo["user_state"]==1?"禁用":"启用"}</a>
+                                </td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                        <!-- /.table-responsive -->
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination" id="page">{php}echo $pageNum{/php}</ul>
+                        </div>
+                    </div>
+                </form>
+
+                        <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="{$public}/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{$public}/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{$public}/js/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="{$public}/js/jquery.dataTables.min.js"></script>
+    <script src="{$public}/js/dataTables.bootstrap.min.js"></script>
+    <script src="{$public}/js/dataTables.responsive.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{$public}/js/sb-admin-2.js"></script>
+
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+        $(".page").click(function(){
+            page=$(this).text();
+            console.log(page);
+            $.ajax({
+                type:"post",
+                url:"ustable",
+                data:{page:page},
+                success:function(response){
+                    list=eval(response);
+                    table(list);
+                },
+                error:function(result){
+                    console.log(0);
+                }
+            });
+        });
+    });
+    function adlist(){
+        $(".bca").click(function(){
+            page=$(this).text();
+            $.ajax({
+                type:"post",
+                url:"userlist",
+                data:{page:page},
+                success:function(response){
+                    list=eval(response);
+                    table(list);
+                },
+                error:function(result){
+                    console.log(0);
+                }
+            });
+        });
+    }
+    $("#btn").click(function(){
+        $.ajax({
+            type:"post",
+            url:"listajax",
+            data:{search:$("#search").val()},
+            success:function(response){
+                response=JSON.parse(response);
+                list=response["0"];
+                table(list);
+                $("#page").html(response["1"]);
+                $(".page").off();
+                $(".page").attr("class","bca");
+                adlist();
+            },
+            error:function(result){
+                console.log(0);
+            }
+        });
+    });
+    function table(list){
+        result="";
+        for(i=0;i<list.length;i++){
+            result+="<tr>";
+            result+="<td>"+list[i].user_id+"</td>";
+            result+="<td>"+list[i].user_name+"</td>";
+            result+="<td>"+list[i].user_sex+"</td>";
+            result+="<td>"+list[i].user_age+"</td>";
+            result+="<td>"+list[i].user_email+"</td>";
+            result+="<td>"+list[i].user_addtime+"</td>";
+            result+="<td>"+"<span id='"+list[i].user_id+"' class='state'>"+(list[i].user_state==1?"启用":"禁用")+"</span>"+"</td>";
+            result+="<td>"+"<a href='update?id="+list[i].user_id+"'>修改</a>"+
+                " <a class='delete' data-id='"+list[i].user_id+"'>删除</a>"+
+                "<a class='sta' data-id='"+list[i].user_id+"'data-state='"+list[i].user_state+"'>"+(list[i].user_state==1?"禁用":"启用")+"</a>"+
+                "</td>";
+            result+="</tr>";
+        }
+        $("#result").html(result);
+        delect();
+        upstate();
+    }
+    function delect(){
+        $(".delete").click(function(){
+            if(confirm("确定删除吗？")){
+                that = $(this);
+                id = that.data('id');
+                $.ajax({
+                    type:"post",
+                    url:"delect",
+                    data:{id:id},
+                    success:function(request){
+                        if(request == 1){
+                            that.parent().parent().remove();
+                        }else{
+                            alert("要删除的ID不存在");
+                        }
+                    },
+                    error:function(request){
+                        alert(request);
+                    }
+                })
+            }
+        });
+    }
+
+    function upstate(){
+        $(".sta").on('click',function() {
+            that = $(this);
+            var id = that.data('id');
+            state = that.attr('data-state');
+            $.ajax({
+                type:"get",
+                url:"upstate",
+                data:{id:id,state:state},
+                success:function(request){
+                    if(state == 1){
+                        that.attr('data-state',0);
+                        $("span#"+id).text("禁用");
+                        that.text('启用');
+                    }else{
+                        that.attr('data-state',1);
+                        $("span#"+id).text("启用");
+                        that.text('禁用');
+                    }
+                },
+                error:function(request){
+                    alert(request);
+                }
+            })
+        });
+    }
+    delect();
+    upstate();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>表格</title>
+    <script src="{$public}/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+<div class="ca">
+    <form id="form1" action="fenyen" method="post" enctype="multipart/form-data">
+        <p><b>在输入框输入一个姓名：</b></p>
+        <!--<form id="mainForm" method="post" action="getar">-->
+        姓名：<input name="name" id="name" type="text"><br/>
+        <input type="submit" value="查询"/>
+        <!--</form>-->
+        <table width="100%" class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>name</th>
+                <th>sex</th>
+                <th>age</th>
+                <th>addtime</th>
+                <th>state</th>
+            </tr>
+            </thead>
+            <tbody>
+            <volist name="list" id="vo" mod="2">
+                <tr {eq name="mod" value="0"} style="background-color:#FFF;"{eq}>
+                <td>我是单元格内容</td>
+                <td>我也是单元格内容</td>
+                </tr>
+            </volist>
+            {volist name="list" id="vo"}
+                <tr>
+                    <td>{$vo.name}</td>
+                    <td>{$vo["sex"]}</td>
+                    <td>{$vo["age"]}</td>
+                    <td>{$vo["addtime"]|date="Y-m-d H:i:s",###}</td>
+                    <td>{$vo["state"]}</td>
+                </tr>
+            {/volist}
+            </tbody>
+            第{$page}页,共有{$num}条记录
+        </table>
+        <div id="page"></div>
+    </form>
+</div>
+
+<script>
+
+    // $(function () {
+    //     logo();
+    // })
+    function logo(){
+        $.ajax({
+            type:"POST",
+            dataType:"text",
+            url:"fenyen",
+            data:$("#form1").serialize(),
+            success:function(result){
+                var result=JSON.parse(result);
+                var str='';
+                for(var i=0;i<result.length;i++)
+                {
+                    var to=new Date(result[i]["addtime"]*1000);
+                    ca=to.toLocaleString();
+                    str+='<tr>'
+                    str+='<td>'+result[i]["name"]+'</td>'
+                    str+='<td>'+result[i]["sex"]+'</td>'
+                    str+='<td>'+result[i]["age"]+'</td>'
+                    str+='<td>'+ca+'</td>'
+                    str+='<td>'+result[i]["state"]+'</td>'
+                    str+='</tr>'
+                }
+                $("#txtHint").html(str);
+            },
+            error:function(){
+                alert("unusual");
+            }
+        });
+    }
+
+    Date.prototype.toLocaleString = function() {
+        return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日 " + this.getHours() + "点" + this.getMinutes() + "分" + this.getSeconds() + "秒";
+    };
+    Date.prototype.toLocaleString = function() {
+        return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日 " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>二级联动</title>
+    <script src="../../../../static/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <form>
+        <select id="pid">
+            <option value=""></option>
+            {volist name="list" id="vo"}
+            <option value="{$vo.cat_id}">{$vo["cat_name"]}</option>
+            {/volist}
+        </select>
+        <select id="catid">
+            <option value=""></option>
+        </select>
+        <button id="btn">提交</button>
+    </form>
+
+    <script>
+        $("#pid").change(function(){
+            // $("#catid").options.length=1;
+            pid=$("#pid").val();
+            $.ajax({
+                type:"get",
+                url:"chaxun",
+                data:{pid:pid},
+                success:function(response){
+                    list=JSON.parse(response);
+                    classtwo(list);
+                },
+                error:function(){
+                    console.log("error");
+                }
+            })
+        });
+        function classtwo(list){
+            result="";
+            result+="<option value=''></option>";
+            for(i=0;i<list.length;i++){
+                result+="<option value='"+list[i].cat_id+"'>"+list[i].cat_name+"</option>";
+            }
+            $("#catid").html(result);
+        }
+        $("#btn").click(function(){
+            pid=$("#pid").val();
+            catid=$("#catid").val();
+            $.ajax({
+                type:"post",
+                url:"actk",
+                data:{pid:pid,catid:catid},
+                success:function(response){
+                    console.log(response);
+                },
+                error:function(response){
+                    console.log("error");
+                }
+            })
+        });
+
+    </script>
+</body>
+</html>

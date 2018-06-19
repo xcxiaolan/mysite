@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bact</title>
+    <script src="/utf8-php/ueditor.config.js"></script>
+    <script src="/utf8-php/ueditor.all.js"></script>
+    <script src="{$public}/js/jquery-3.3.1.js"></script>
+
+
+</head>
+<body>
+<form action="getcontent" method="post">
+    <script id="container" name="content" type="text/plain">adf</script>
+    <textarea name="container"></textarea>
+    <button>确定</button>
+</form>
+
+    <script type="text/javascript">
+        var ue = UE.getEditor('container');
+        // var con = ue.getContent();
+        // console.log(con);
+        //对编辑器的操作最好在编辑器ready之后再做
+    </script>
+    <!--<script>-->
+        <!--$("#ca").click(function(){-->
+            <!--alert("123");-->
+        <!--})-->
+    <!--</script>-->
+
+</body>
+</html>
