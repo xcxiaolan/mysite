@@ -1,3 +1,4 @@
+<!document html>
 <html>
   <head>
   </head>
